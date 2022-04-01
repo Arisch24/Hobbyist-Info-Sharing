@@ -15,8 +15,6 @@ public class Main {
     static ArrayList<Member> memberList = new ArrayList<Member>();
     // to store the member's hobbies
     static LinkedList<Hobby> hobbies;
-    // iterator for the ADTs
-    static Iterator<Member> memberListIterator = memberList.getIterator();
     // to store the current member
     static Member member = new Member();
     // input for user input
@@ -121,7 +119,8 @@ public class Main {
     }
     
     public static boolean VerifyUser(String name, String password) {
-        
+        // iterator for the ADTs
+        Iterator<Member> memberListIterator = memberList.getIterator();
         boolean verify = false;
         
         while(memberListIterator.hasNext()){
