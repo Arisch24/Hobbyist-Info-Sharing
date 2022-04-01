@@ -4,8 +4,11 @@ import java.util.Scanner;
 import adt.*;
 import entity.*;
 import java.time.LocalDate;
-import java.util.InputMismatchException;
 import java.util.Iterator;
+
+// all exceptions
+import java.time.DateTimeException;
+import java.util.InputMismatchException;
 
 
 public class Main {
@@ -17,6 +20,8 @@ public class Main {
     static LinkedList<Hobby> hobbies;
     // to store the current member
     static Member member = new Member();
+    // to search the page
+    static Sharing sharing = new Sharing();
     // input for user input
     static int input;
     
@@ -132,8 +137,8 @@ public class Main {
                 break;
             }
         }
-        // at the end of the loop the member's details get stored in the global scope member object (line 126)
-        // and the member's hobbies get stored in the linked list (line 128)
+        // at the end of the loop the member's details get stored in the global scope member object (line 132)
+        // and the member's hobbies get stored in the linked list (line 136)
         return verify;
     }
     
@@ -429,7 +434,7 @@ public class Main {
         System.out.println("=======================================");
         System.out.println("1. Continue");
         System.out.println("2. Add your hobby to this page");
-        System.out.println("3. Search to view a hobby");
+        System.out.println("3. Search sharing page");
         System.out.println("4. Download hobbies");
         System.out.println("5. Back");
         
@@ -440,14 +445,15 @@ public class Main {
         
         switch(choice) {
             case 1:
-                int num = 1;
-                    System.out.println("Press any key to continue...");
-                while(page.peek() != null) {
-                    System.out.println("-------------" + num + "--------------");
-                    System.out.println(page.pop());
+                Iterator<Sharing> pageIterator = page.getIterator();
+                while(pageIterator.hasNext()) {
+                    sharing = pageIterator.next();
+                    System.out.println("----------{" + sharing.getId()+ "}-----------");
+                    System.out.println(sharing);
                     System.out.println("---------------------------\n");
                     scan.next();
                 }
+                System.out.println("Press any key to continue...");
                 ViewSharingPage(location);
                 break;
             case 2:
@@ -494,7 +500,7 @@ public class Main {
     
     public static void SearchSharedPage() {
         System.out.println("=======================================");
-        System.out.println("Search Hobby");
+        System.out.println("Search Sharing Page");
         System.out.println("=======================================");
         System.out.println("1. Search page based on author");
         System.out.println("2. Search page based on hobby name");
@@ -507,11 +513,96 @@ public class Main {
         
         switch(choice) {
             case 1:
+                System.out.print("Enter the author's name to search for: ");
+                scan.nextLine();
+                String name = scan.nextLine();
+                SearchByCriteria("name", name);
                 break;
             case 2:
+                System.out.print("Enter the hobby name to search for: ");
+                scan.nextLine();
+                String hobbyName = scan.nextLine();
+                SearchByCriteria("hobby", hobbyName);
                 break;
             case 3:
+                System.out.print("Enter the date to search for (Format -> YYYY-MM-DD) : ");
+                String date = GetValidDate();
+                SearchByCriteria("date", date);
                 break;
+        }
+    }
+    
+    public static String GetValidDate() {
+        boolean check = false;
+        // regex to get valid date format
+        String regex = "\\d{4}-\\d{1,2}-\\d{1,2}";
+        LocalDate userDate = LocalDate.now();
+        String date;
+        scan.nextLine();
+        
+        do {
+            date = scan.nextLine();
+            try{
+                // split date to array with 3 values ex: { "2022", "12", "31" }
+                String[] split = date.split("-");
+                
+                userDate = LocalDate.of(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                
+                // if date is more than current date then show an error
+                if(userDate.compareTo(LocalDate.now()) > 0) {
+                    System.out.println("Date cannot be later than the current date");
+                }else {
+                    check = true;
+                }
+            } 
+            catch(DateTimeException ex) {
+                // if date entered by user cannot be converted to LocalDate value
+                System.out.println("Enter a valid date pls");
+            } 
+            catch(NumberFormatException ex) {
+                // if user doesn't enter an integer
+                System.out.println("Enter a number pls");
+            } 
+            catch(ArrayIndexOutOfBoundsException ex) {
+                // if user doesn't incluce dashes in the date
+                System.out.println("The format is YYYY-MM-DD");
+            }
+        }while(check == false || !date.trim().matches(regex));
+        
+        return date;
+    }
+    
+    public static void SearchByCriteria(String criteria, String value) {
+        // to avoid mistakes
+        criteria = criteria.toLowerCase();
+        
+        Iterator<Sharing> pageIterator = page.getIterator();
+        
+        while(pageIterator.hasNext()) {
+            sharing = pageIterator.next();
+            switch(criteria) {
+                case "name":
+                    if(sharing.getMemberName().trim().toLowerCase().equals(value.toLowerCase())) {
+                        System.out.println("\n----------{" + sharing.getId() + "}-----------");
+                        System.out.println(sharing);
+                        System.out.println("---------------------------\n");
+                    }
+                    break;
+                case "hobby":
+                    if(sharing.getHobbyName().getName().toLowerCase().trim().equals(value.toLowerCase())) {
+                        System.out.println("\n----------{" + sharing.getId() + "}-----------");
+                        System.out.println(sharing);
+                        System.out.println("---------------------------\n");
+                    }
+                    break;
+                case "date":
+                    if(sharing.getDateAdded().toString().equals(value)) {
+                        System.out.println("\n----------{" + sharing.getId() + "}-----------");
+                        System.out.println(sharing);
+                        System.out.println("---------------------------\n");
+                    }
+                    break;
+            }
         }
     }
     
