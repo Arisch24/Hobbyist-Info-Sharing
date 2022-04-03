@@ -3,10 +3,13 @@ package client;
 import java.util.Scanner;
 import adt.*;
 import entity.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.Iterator;
 
 // all exceptions
+import java.io.IOException;
 import java.time.DateTimeException;
 import java.util.InputMismatchException;
 
@@ -445,15 +448,17 @@ public class Main {
         
         switch(choice) {
             case 1:
-                Iterator<Sharing> pageIterator = page.getIterator();
-                while(pageIterator.hasNext()) {
-                    sharing = pageIterator.next();
+                System.out.println("Press any key to continue...");
+                int size = page.capacity() - 1;
+                while(size >= 0) {
+                    // get page at the current position and store into sharing
+                    sharing = page.elementAt(size);
                     System.out.println("----------{" + sharing.getId()+ "}-----------");
                     System.out.println(sharing);
                     System.out.println("---------------------------\n");
                     scan.next();
+                    size--;
                 }
-                System.out.println("Press any key to continue...");
                 ViewSharingPage(location);
                 break;
             case 2:
@@ -516,18 +521,21 @@ public class Main {
                 System.out.print("Enter the author's name to search for: ");
                 scan.nextLine();
                 String name = scan.nextLine();
-                SearchByCriteria("name", name);
+                String nameResult = SearchByCriteria("name", name);
+                System.out.println(nameResult);
                 break;
             case 2:
                 System.out.print("Enter the hobby name to search for: ");
                 scan.nextLine();
                 String hobbyName = scan.nextLine();
-                SearchByCriteria("hobby", hobbyName);
+                String hobbyResult = SearchByCriteria("hobby", hobbyName);
+                System.out.println(hobbyResult);
                 break;
             case 3:
                 System.out.print("Enter the date to search for (Format -> YYYY-MM-DD) : ");
                 String date = GetValidDate();
-                SearchByCriteria("date", date);
+                String dateResult = SearchByCriteria("date", date);
+                System.out.println(dateResult);
                 break;
         }
     }
@@ -572,42 +580,102 @@ public class Main {
         return date;
     }
     
-    public static void SearchByCriteria(String criteria, String value) {
+    public static String SearchByCriteria(String criteria, String value) {
         // to avoid mistakes
         criteria = criteria.toLowerCase();
         
         Iterator<Sharing> pageIterator = page.getIterator();
+        String result = "";
         
         while(pageIterator.hasNext()) {
             sharing = pageIterator.next();
             switch(criteria) {
                 case "name":
                     if(sharing.getMemberName().trim().toLowerCase().equals(value.toLowerCase())) {
-                        System.out.println("\n----------{" + sharing.getId() + "}-----------");
-                        System.out.println(sharing);
-                        System.out.println("---------------------------\n");
+                        result += "\n----------{" + sharing.getId() + "}-----------\n";
+                        result += sharing;
+                        result += "\n---------------------------\n";
                     }
                     break;
                 case "hobby":
                     if(sharing.getHobbyName().getName().toLowerCase().trim().equals(value.toLowerCase())) {
-                        System.out.println("\n----------{" + sharing.getId() + "}-----------");
-                        System.out.println(sharing);
-                        System.out.println("---------------------------\n");
+                        result += "\n----------{" + sharing.getId() + "}-----------\n";
+                        result += sharing;
+                        result += "\n---------------------------\n";
                     }
                     break;
                 case "date":
                     if(sharing.getDateAdded().toString().equals(value)) {
-                        System.out.println("\n----------{" + sharing.getId() + "}-----------");
-                        System.out.println(sharing);
-                        System.out.println("---------------------------\n");
+                        result += "\n----------{" + sharing.getId() + "}-----------\n";
+                        result += sharing;
+                        result += "\n---------------------------\n";
                     }
                     break;
+                case "all":
+                        result += "\n----------{" + sharing.getId() + "}-----------\n";
+                        result += sharing;
+                        result += "\n---------------------------\n";
+                        break;
             }
         }
+        return result;
     }
     
     public static void DownloadHobbies() {
+        System.out.println("=======================================");
+        System.out.println("Download Hobbies");
+        System.out.println("=======================================");
+        System.out.println("1. Download all hobbies");
+        System.out.println("2. Download based on author");
+        System.out.println("3. Download based on hobby name");
+        System.out.println("4. Download based on date");
+        System.out.println("5. Back");
         
+        int choice;
+        do {
+            choice = UserInput();
+        }while(choice < 1 || choice > 5);
+        
+        switch(choice) {
+            case 1:
+                String allResult = SearchByCriteria("all", "");
+                WriteToFile(allResult, "hobbies.txt");
+                break;
+            case 2:
+                System.out.println("Enter the author's name to download");
+                scan.nextLine();
+                String name = scan.nextLine();
+                String authorResult = SearchByCriteria("name", name);
+                WriteToFile(authorResult, name);
+                break;
+            case 3:
+                System.out.println("Enter the hobby name to download");
+                scan.nextLine();
+                String hobbyName = scan.nextLine();
+                String hobbyResult = SearchByCriteria("hobby", hobbyName);
+                WriteToFile(hobbyResult, hobbyName);
+                break;
+            case 4:
+                System.out.println("Enter the date to download");
+                String date = GetValidDate();
+                String dateResult = SearchByCriteria("date", date);
+                WriteToFile(dateResult, date);
+                break;
+            case 5:
+                // automatically returns
+                break;
+        }
+    }
+    
+    public static void WriteToFile(String result, String filename) {
+        try {
+            FileWriter file = new FileWriter(filename + ".txt");
+            file.write(result);
+            file.close();
+            System.out.println("Successfully downloaded as " + filename + ".txt\n");
+        }catch(IOException e) {
+            System.out.println("An error occured.\n");
+        }
     }
     
     public static void Exit() {
@@ -616,19 +684,43 @@ public class Main {
     }
     
     public static void CreateDefaultUsers() {
+        ArrayStack<LocalDate> date = new ArrayStack<LocalDate>();
+        date.push(LocalDate.of(1969, 11, 7));
+        date.push(LocalDate.of(1976, 3, 24));
+        date.push(LocalDate.of(2000, 10, 24));
+        date.push(LocalDate.of(2005, 3, 15));
+        date.push(LocalDate.of(2010, 12, 27));
+        date.push(LocalDate.of(2011, 11, 28));
+        
+        date.push(LocalDate.of(2022, 1, 3));
+        date.push(LocalDate.of(2003, 10, 1));
+        date.push(LocalDate.of(2006, 3, 21));
+        
+        date.push(LocalDate.of(2013, 3, 22));
+        date.push(LocalDate.of(2011, 4, 17));
+        date.push(LocalDate.of(2004, 9, 6));
+        
         // add a few hobbies for each member
         LinkedList<Hobby> hobbies1 = new LinkedList<Hobby>();
         hobbies1.add(new Hobby("Coding"));
         hobbies1.add(new Hobby("Eating"));
         hobbies1.add(new Hobby("Working out"));
         hobbies1.add(new Hobby("Playing game"));
+        hobbies1.add(new Hobby("Sleeping"));
+        hobbies1.add(new Hobby("Cooking"));
         memberList.add(new Member("Arisch", "pwd", hobbies1));
-        LocalDate date1 = LocalDate.of(2000, 10, 24);
         
-        // add your hobbies here
-        memberList.add(new Member("Lee Wen Zhuo", "pwd"));
-        memberList.add(new Member("Ooi Guan Zhi", "pwd"));
-        memberList.add(new Member("haha", "okok"));
+        LinkedList<Hobby> hobbies2 = new LinkedList<Hobby>();
+        hobbies2.add(new Hobby("Basketball"));
+        hobbies2.add(new Hobby("Playing game"));
+        hobbies2.add(new Hobby("Badminton"));
+        memberList.add(new Member("Lee Wen Zhuo", "h1234", hobbies2));
+        
+        LinkedList<Hobby> hobbies3 = new LinkedList<Hobby>();
+        hobbies3.add(new Hobby("Drawing"));
+        hobbies3.add(new Hobby("Football"));
+        hobbies3.add(new Hobby("Playing game"));
+        memberList.add(new Member("Ooi Guan Zhi", "Guan", hobbies3));
         
         /* 
         better to create another iterator since the first iterator is used in the function 
@@ -638,11 +730,13 @@ public class Main {
         Iterator<Member> tempMemberIterator = memberList.getIterator();
         
         // add the users hobbies to sharing page
+        int index = 0;
         while(tempMemberIterator.hasNext()) {
             member = tempMemberIterator.next();
             Iterator<Hobby> hobbyListIterator = member.getHobbyList().getIterator();
             while(hobbyListIterator.hasNext()) {
-                page.push(new Sharing(member.getName(), hobbyListIterator.next(), date1));
+                page.push(new Sharing(member.getName(), hobbyListIterator.next(), date.elementAt(index)));
+                index++;
             }
         }
     }
