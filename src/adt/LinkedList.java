@@ -155,6 +155,34 @@ public class LinkedList<T> implements ListInterface<T> {
   public boolean isFull() {
     return false;
   }
+  
+  public T firstElement() {
+      return firstNode.data;
+  }
+  
+  public T removeFirst() {
+      T result = firstNode.data;
+      firstNode = firstNode.next;
+      return result;
+  }
+  
+  public T lastElement() {
+      Node currentNode = firstNode;
+      while (currentNode.next != null) {
+        currentNode = currentNode.next;
+      }
+      return currentNode.data;
+  }
+  
+  public T removeLast() {
+      Node currentNode = firstNode;
+      while (currentNode.next != null) {
+        currentNode = currentNode.next;
+      }
+      T element = currentNode.data;
+      currentNode = null;
+      return element;
+  }
 
   @Override
   public String toString() {
