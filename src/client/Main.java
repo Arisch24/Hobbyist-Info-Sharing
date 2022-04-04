@@ -53,6 +53,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 3){
+                System.out.println("Your options are 1 to 3 only. Try again.");
+            }
         }while(choice < 1 || choice > 3);
         
             switch(choice){
@@ -98,6 +101,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 2){
+                System.out.println("Your options are 1 and 2 only. Try again.");
+            }
         }while(choice < 1 || choice > 2);
         
         switch(choice){
@@ -161,6 +167,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 5){
+                System.out.println("Your options are 1 to 5 only. Try again.");
+            }
         }while(choice < 1 || choice > 5);
         
         switch(choice){
@@ -210,6 +219,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 3){
+                System.out.println("Your options are 1 to 3 only. Try again.");
+            }
         }while(choice < 1 || choice > 3);
         
         scan.nextLine();
@@ -241,6 +253,9 @@ public class Main {
         char selection;
         do {
             selection = scan.next().charAt(0);
+            if(selection != 'y' && selection != 'Y' && selection != 'n' && selection != 'N'){
+                System.out.println("Your options are Y or N only. Try again.");
+            }
             // do while the selection is not equal to either of these characters
         }while(selection != 'y' && selection != 'Y' && selection != 'n' && selection != 'N');
         
@@ -282,6 +297,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 6){
+                System.out.println("Your options are 1 to 6 only. Try again.");
+            }
         }while(choice < 1 || choice > 6);
         
         switch(choice) {
@@ -316,6 +334,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 2){
+                System.out.println("Your options are 1 and 2 only. Try again.");
+            }
         }while(choice < 1 || choice > 2);
         
         switch(choice) {
@@ -358,6 +379,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 2){
+                System.out.println("Your options are 1 and 2 only. Try again.");
+            }
         }while(choice < 1 || choice > 2);
         
         switch(choice) {
@@ -374,8 +398,12 @@ public class Main {
                 int hobbyIndex;
                 do {
                     hobbyIndex = UserInput();
-                }while (hobbyIndex < 1 || hobbyIndex > index);
+                    if(hobbyIndex < 1 || hobbyIndex > index - 1){
+                        System.out.println("Your options are 1 to " + (index - 1) + " only. Try again.");
+                    }
+                }while (hobbyIndex < 1 || hobbyIndex > index - 1);
                 scan.nextLine();
+                System.out.println("Enter new hobby name");
                 String newHobbyName = scan.nextLine();
                 
                 // find hobby location and update it
@@ -402,6 +430,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 2){
+                System.out.println("Your options are 1 and 2 only. Try again.");
+            }
         }while(choice < 1 || choice > 2);
         
         switch(choice) {
@@ -418,12 +449,16 @@ public class Main {
                 int hobbyIndex;
                 do {
                     hobbyIndex = UserInput();
-                }while(hobbyIndex < 1 || hobbyIndex > index);
+                    if(hobbyIndex < 1 || hobbyIndex > index - 1){
+                        System.out.println("Your options are 1 to " + index + " only. Try again.");
+                    }
+                }while(hobbyIndex < 1 || hobbyIndex > index - 1);
                 
                 // find hobby location and delete it
                 hobbies.remove(hobbyIndex);
                 member.setHobbyList(hobbies);
                 memberList.replace(location, member);
+                System.out.println("Hobby successfully deleted.");
                 break;
             case 2:
                 break;
@@ -444,6 +479,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 5){
+                System.out.println("Your options are 1 to 5 only. Try again.");
+            }
         }while(choice < 1 || choice > 5);
         
         switch(choice) {
@@ -478,7 +516,10 @@ public class Main {
                 int chooseHobby;
                 do {
                     chooseHobby = UserInput();
-                }while(chooseHobby < 1 || chooseHobby > index);
+                    if(chooseHobby < 1 || chooseHobby > index - 1){
+                        System.out.println("Your options are 1 to " + (index - 1) + " only. Try again.");
+                    }
+                }while(chooseHobby < 1 || chooseHobby > index - 1);
                 
                 // add user's hobby to the sharing page
                 Hobby hobby = member.getHobbyList().getEntry(chooseHobby);
@@ -515,6 +556,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 3){
+                System.out.println("Your options are 1 to 3 only. Try again.");
+            }
         }while(choice < 1 || choice > 3);
         
         switch(choice) {
@@ -635,6 +679,9 @@ public class Main {
         int choice;
         do {
             choice = UserInput();
+            if(choice < 1 || choice > 5){
+                System.out.println("Your options are 1 to 5 only. Try again.");
+            }
         }while(choice < 1 || choice > 5);
         
         switch(choice) {
@@ -680,6 +727,7 @@ public class Main {
     }
     
     public static void Exit() {
+        System.out.println("Thank you for using this system.");
         scan.close();
         System.exit(0);
     }
