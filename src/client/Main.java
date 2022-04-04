@@ -486,6 +486,7 @@ public class Main {
                 page.push(new Sharing(member.getName(), hobby, currentDate));
                 
                 ViewSharingPage(location);
+                break;
             case 3:
                 // implement search function to stack
                 SearchSharedPage();
