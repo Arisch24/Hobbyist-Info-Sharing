@@ -3,7 +3,6 @@ package client;
 import java.util.Scanner;
 import adt.*;
 import entity.*;
-import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -28,8 +27,8 @@ public class Main {
     // input for user input
     static int input;
     
-    
-    public static int UserInput() {
+    // Arischvaran
+    public static int userInput() {
         while (true) {
             try {
                 input = scan.nextInt();
@@ -42,7 +41,8 @@ public class Main {
         return input;
     }
     
-    public static void Start() {
+    // Arischvaran, Ooi Guan Zhi, Lee Wen Zhuo
+    public static void start() {
         System.out.println("=======================================");
         System.out.println("Hobbyist Info Sharing System");
         System.out.println("=======================================");
@@ -52,7 +52,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 3){
                 System.out.println("Your options are 1 to 3 only. Try again.");
             }
@@ -60,18 +60,19 @@ public class Main {
         
             switch(choice){
                 case 1:
-                    Register();
+                    register();
                     break;
                 case 2:
-                    Login();
+                    login();
                     break;
                 case 3:
-                    Exit();
+                    exit();
                     break;
             }
     }
     
-    public static void Register() {
+    // Lee Wen Zhuo
+    public static void register() {
         System.out.println("=======================================");
         System.out.println("Registration");
         System.out.println("=======================================");
@@ -87,10 +88,11 @@ public class Main {
         // add member to memberlist
         Member newMember = new Member(name, password);
         memberList.add(newMember);
-        Start();
+        start();
     }
     
-    public static void Login() {
+    // Lee Wen Zhuo
+    public static void login() {
         scan = new Scanner(System.in);
         System.out.println("=======================================");
         System.out.println("Login");
@@ -100,7 +102,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 2){
                 System.out.println("Your options are 1 and 2 only. Try again.");
             }
@@ -110,30 +112,33 @@ public class Main {
             case 1:
                 break;
             case 2:
-                Start();
+                start();
                 break;
         }
         // get user's name and password to verify
         System.out.print("Enter your name: ");
         scan.nextLine();
-        String name = scan.next();
+        String name = scan.nextLine();
         
         System.out.print("Enter your password: ");
-        scan.nextLine();
         String password = scan.nextLine();
         
         // verify user here
-        if(VerifyUser(name.trim(), password.trim())){
+        System.out.println(name);
+        System.out.println(password);
+        if(verifyUser(name.trim(), password.trim())){
             System.out.println("You are logged in!");
-            Navigation();
+            navigation();
         }else {
             System.out.println("You are not registered. Try again.");
-            Login();
+            login();
         }
     }
     
-    public static boolean VerifyUser(String name, String password) {
+    // Lee Wen Zhuo
+    public static boolean verifyUser(String name, String password) {
         // iterator for the ADTs
+        System.out.println(memberList);
         Iterator<Member> memberListIterator = memberList.getIterator();
         boolean verify = false;
         
@@ -151,7 +156,8 @@ public class Main {
         return verify;
     }
     
-    public static void Navigation() {
+    // Lee Wen Zhuo
+    public static void navigation() {
         // member location in the list
         int location = memberList.indexOf(member);
         
@@ -166,7 +172,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 5){
                 System.out.println("Your options are 1 to 5 only. Try again.");
             }
@@ -174,24 +180,25 @@ public class Main {
         
         switch(choice){
             case 1:
-                Hobbies(location);
+                hobbies(location);
                 break;
             case 2:
-                ViewProfile();
+                viewProfile();
                 break;
             case 3:
-                UpdateProfile(location);
+                updateProfile(location);
                 break;
             case 4:
-                DeleteProfile(location);
+                deleteProfile(location);
                 break;
             case 5:
-                Login();
+                login();
                 break;
         }
     }
     
-    public static void ViewProfile() {
+    // Lee Wen Zhuo
+    public static void viewProfile() {
         System.out.println("=======================================");
         System.out.println("View Profile");
         System.out.println("=======================================");
@@ -201,10 +208,11 @@ public class Main {
         System.out.println("Press any key to continue...");
         scan.next();
         System.out.println();
-        Navigation();
+        navigation();
     }
     
-    public static void UpdateProfile(int location) {
+    // Lee Wen Zhuo
+    public static void updateProfile(int location) {
         
         System.out.println("=======================================");
         System.out.println("Update Profile");
@@ -218,7 +226,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 3){
                 System.out.println("Your options are 1 to 3 only. Try again.");
             }
@@ -241,13 +249,14 @@ public class Main {
                 memberList.replace(location, member);
                 break;
             case 3:
-                Navigation();
+                navigation();
                 break;
         }
-        Navigation();
+        navigation();
     }
     
-    public static void DeleteProfile(int location) {
+    // Lee Wen Zhuo
+    public static void deleteProfile(int location) {
         
         System.out.println("Confirm deletion of profile? (Y or N) (Note: This action cannot be undone) ");
         char selection;
@@ -261,29 +270,31 @@ public class Main {
         
         switch(selection){
             case 'y':
-                Delete(location);
-                Start();
+                delete(location);
+                start();
                 break;
             case 'Y':
-                Delete(location);
-                Start();
+                delete(location);
+                start();
                 break;
             case 'n':
-                Navigation();
+                navigation();
                 break;
             case 'N':
-                Navigation();
+                navigation();
                 break;
         }
     }
     
-    public static void Delete(int location) {
+    // Lee Wen Zhuo
+    public static void delete(int location) {
         // delete the user profile
         memberList.remove(location);
         System.out.println("Deletion successful.");
     }
     
-    public static void Hobbies(int location) {
+    // Ooi Guan Zhi
+    public static void hobbies(int location) {
         System.out.println("=======================================");
         System.out.println("Hobbies Section");
         System.out.println("=======================================");
@@ -296,7 +307,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 6){
                 System.out.println("Your options are 1 to 6 only. Try again.");
             }
@@ -304,27 +315,28 @@ public class Main {
         
         switch(choice) {
             case 1:
-                AddHobby(location);
+                addHobby(location);
                 break;
             case 2:
-                ViewHobbies();
+                viewHobbies();
                 break;
             case 3:
-                UpdateHobby(location);
+                updateHobby(location);
                 break;
             case 4:
-                DeleteHobby(location);
+                deleteHobby(location);
                 break;
             case 5:
-                ViewSharingPage(location);
+                viewSharingPage(location);
                 break;
             case 6:
-                Navigation();
+                navigation();
                 break;
         }
     }
     
-    public static void AddHobby(int location) {
+    // Ooi Guan Zhi
+    public static void addHobby(int location) {
         System.out.println("=======================================");
         System.out.println("Add a hobby");
         System.out.println("=======================================");
@@ -333,7 +345,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 2){
                 System.out.println("Your options are 1 and 2 only. Try again.");
             }
@@ -353,10 +365,11 @@ public class Main {
                 // automatically returns to hobby function
                 break;
         }
-        Hobbies(location);
+        hobbies(location);
     }
     
-    public static void ViewHobbies() {
+    // Ooi Guan Zhi
+    public static void viewHobbies() {
         int location = memberList.indexOf(member);
         System.out.println("=======================================");
         System.out.println("View Hobbies");
@@ -364,10 +377,11 @@ public class Main {
         System.out.println(hobbies);
         System.out.println("Press any key to continue...");
         scan.next();
-        Hobbies(location);
+        hobbies(location);
     }
     
-    public static void UpdateHobby(int location) {
+    // Ooi Guan Zhi
+    public static void updateHobby(int location) {
         System.out.println("=======================================");
         System.out.println("Update a hobby");
         System.out.println("=======================================");
@@ -378,7 +392,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 2){
                 System.out.println("Your options are 1 and 2 only. Try again.");
             }
@@ -397,7 +411,7 @@ public class Main {
                 // get index of the hobby to be updated
                 int hobbyIndex;
                 do {
-                    hobbyIndex = UserInput();
+                    hobbyIndex = userInput();
                     if(hobbyIndex < 1 || hobbyIndex > index - 1){
                         System.out.println("Your options are 1 to " + (index - 1) + " only. Try again.");
                     }
@@ -415,10 +429,11 @@ public class Main {
                 // automatically return
                 break;
         }
-        Hobbies(location);
+        hobbies(location);
     }
     
-    public static void DeleteHobby(int location) {
+    // Ooi Guan Zhi
+    public static void deleteHobby(int location) {
         System.out.println("=======================================");
         System.out.println("Delete a hobby");
         System.out.println("=======================================");
@@ -429,7 +444,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 2){
                 System.out.println("Your options are 1 and 2 only. Try again.");
             }
@@ -448,7 +463,7 @@ public class Main {
                 // get index of hobby to be deleted
                 int hobbyIndex;
                 do {
-                    hobbyIndex = UserInput();
+                    hobbyIndex = userInput();
                     if(hobbyIndex < 1 || hobbyIndex > index - 1){
                         System.out.println("Your options are 1 to " + index + " only. Try again.");
                     }
@@ -463,10 +478,11 @@ public class Main {
             case 2:
                 break;
         }
-        Hobbies(location);
+        hobbies(location);
     }
     
-    public static void ViewSharingPage(int location) {
+    // Arischvaran
+    public static void viewSharingPage(int location) {
         System.out.println("=======================================");
         System.out.println("Viewers Sharing Page");
         System.out.println("=======================================");
@@ -478,7 +494,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 5){
                 System.out.println("Your options are 1 to 5 only. Try again.");
             }
@@ -497,7 +513,7 @@ public class Main {
                     scan.next();
                     size--;
                 }
-                ViewSharingPage(location);
+                viewSharingPage(location);
                 break;
             case 2:
                 System.out.println("=======================================");
@@ -515,7 +531,7 @@ public class Main {
                 System.out.println("Which hobby do you want to add to the sharing page?");
                 int chooseHobby;
                 do {
-                    chooseHobby = UserInput();
+                    chooseHobby = userInput();
                     if(chooseHobby < 1 || chooseHobby > index - 1){
                         System.out.println("Your options are 1 to " + (index - 1) + " only. Try again.");
                     }
@@ -526,26 +542,27 @@ public class Main {
                 LocalDate currentDate = LocalDate.now();
                 page.push(new Sharing(member.getName(), hobby, currentDate));
                 
-                ViewSharingPage(location);
+                viewSharingPage(location);
                 break;
             case 3:
                 // implement search function to stack
-                SearchSharedPage();
-                ViewSharingPage(location);
+                searchSharedPage();
+                viewSharingPage(location);
                 break;
             case 4:
                 // implement download hobbies
-                DownloadHobbies();
-                ViewSharingPage(location);
+                downloadHobbies();
+                viewSharingPage(location);
                 break;
             case 5:
-                Hobbies(location);
+                hobbies(location);
                 break;
         }
         
     }
     
-    public static void SearchSharedPage() {
+    // Arischvaran
+    public static void searchSharedPage() {
         System.out.println("=======================================");
         System.out.println("Search Sharing Page");
         System.out.println("=======================================");
@@ -555,7 +572,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 3){
                 System.out.println("Your options are 1 to 3 only. Try again.");
             }
@@ -566,26 +583,27 @@ public class Main {
                 System.out.print("Enter the author's name to search for: ");
                 scan.nextLine();
                 String name = scan.nextLine();
-                String nameResult = SearchByCriteria("name", name);
+                String nameResult = searchByCriteria("name", name);
                 System.out.println(nameResult);
                 break;
             case 2:
                 System.out.print("Enter the hobby name to search for: ");
                 scan.nextLine();
                 String hobbyName = scan.nextLine();
-                String hobbyResult = SearchByCriteria("hobby", hobbyName);
+                String hobbyResult = searchByCriteria("hobby", hobbyName);
                 System.out.println(hobbyResult);
                 break;
             case 3:
                 System.out.print("Enter the date to search for (Format -> YYYY-MM-DD) : ");
-                String date = GetValidDate();
-                String dateResult = SearchByCriteria("date", date);
+                String date = getValidDate();
+                String dateResult = searchByCriteria("date", date);
                 System.out.println(dateResult);
                 break;
         }
     }
     
-    public static String GetValidDate() {
+    // Arischvaran
+    public static String getValidDate() {
         boolean check = false;
         // regex to get valid date format
         String regex = "\\d{4}-\\d{1,2}-\\d{1,2}";
@@ -625,7 +643,8 @@ public class Main {
         return date;
     }
     
-    public static String SearchByCriteria(String criteria, String value) {
+    // Arischvaran
+    public static String searchByCriteria(String criteria, String value) {
         // to avoid mistakes
         criteria = criteria.toLowerCase();
         
@@ -666,7 +685,8 @@ public class Main {
         return result;
     }
     
-    public static void DownloadHobbies() {
+    // Arischvaran
+    public static void downloadHobbies() {
         System.out.println("=======================================");
         System.out.println("Download Hobbies");
         System.out.println("=======================================");
@@ -678,7 +698,7 @@ public class Main {
         
         int choice;
         do {
-            choice = UserInput();
+            choice = userInput();
             if(choice < 1 || choice > 5){
                 System.out.println("Your options are 1 to 5 only. Try again.");
             }
@@ -686,28 +706,28 @@ public class Main {
         
         switch(choice) {
             case 1:
-                String allResult = SearchByCriteria("all", "");
-                WriteToFile(allResult, "hobbies.txt");
+                String allResult = searchByCriteria("all", "");
+                writeToFile(allResult, "hobbies.txt");
                 break;
             case 2:
                 System.out.println("Enter the author's name to download");
                 scan.nextLine();
                 String name = scan.nextLine();
-                String authorResult = SearchByCriteria("name", name);
-                WriteToFile(authorResult, name);
+                String authorResult = searchByCriteria("name", name);
+                writeToFile(authorResult, name);
                 break;
             case 3:
                 System.out.println("Enter the hobby name to download");
                 scan.nextLine();
                 String hobbyName = scan.nextLine();
-                String hobbyResult = SearchByCriteria("hobby", hobbyName);
-                WriteToFile(hobbyResult, hobbyName);
+                String hobbyResult = searchByCriteria("hobby", hobbyName);
+                writeToFile(hobbyResult, hobbyName);
                 break;
             case 4:
                 System.out.println("Enter the date to download");
-                String date = GetValidDate();
-                String dateResult = SearchByCriteria("date", date);
-                WriteToFile(dateResult, date);
+                String date = getValidDate();
+                String dateResult = searchByCriteria("date", date);
+                writeToFile(dateResult, date);
                 break;
             case 5:
                 // automatically returns
@@ -715,7 +735,8 @@ public class Main {
         }
     }
     
-    public static void WriteToFile(String result, String filename) {
+    // Arischvaran
+    public static void writeToFile(String result, String filename) {
         try {
             FileWriter file = new FileWriter(filename + ".txt");
             file.write(result);
@@ -726,13 +747,15 @@ public class Main {
         }
     }
     
-    public static void Exit() {
+    // Arischvaran, Ooi Guan Zhi, Lee Wen Zhuo
+    public static void exit() {
         System.out.println("Thank you for using this system.");
         scan.close();
         System.exit(0);
     }
     
-    public static void CreateDefaultUsers() {
+    // Arischvaran, Ooi Guan Zhi, Lee Wen Zhuo
+    public static void createDefaultUsers() {
         ArrayStack<LocalDate> date = new ArrayStack<LocalDate>();
         date.push(LocalDate.of(1969, 11, 7));
         date.push(LocalDate.of(1976, 3, 24));
@@ -773,8 +796,8 @@ public class Main {
         
         /* 
         better to create another iterator since the first iterator is used in the function 
-        VerifyUsers() which means if the iterator is used here then the next value will be null
-        and the VerifyUsers() function can't check for the values so an iterator cannot be used twice
+        verifyUsers() which means if the iterator is used here then the next value will be null
+        and the verifyUsers() function can't check for the values so an iterator cannot be used twice
         */
         Iterator<Member> tempMemberIterator = memberList.getIterator();
         
@@ -790,8 +813,9 @@ public class Main {
         }
     }
     
+    // Arischvaran, Ooi Guan Zhi, Lee Wen Zhuo
     public static void main(String[] args) {
-        CreateDefaultUsers();
-        Start();
+        createDefaultUsers();
+        start();
     }
 }
