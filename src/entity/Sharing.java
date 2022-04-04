@@ -35,6 +35,18 @@ public class Sharing {
     public LocalDate getDateAdded() {
         return dateAdded;
     }
+    
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+    
+    public void setHobbyName(Hobby hobbyName) {
+        this.hobbyName = hobbyName;
+    }
+    
+    public void setDateAdded(LocalDate dateAdded) {
+        this.dateAdded = dateAdded;
+    }
 
     @Override
     public String toString() {
