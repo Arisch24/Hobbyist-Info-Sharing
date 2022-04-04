@@ -136,6 +136,36 @@ public class ArrayList<T> implements ListInterface<T>, Serializable{
       return where;
   }
   
+  public void trimToSize() {
+      int size = numberOfEntries;
+      
+      // create a new array which size of entries;
+      T[] newList = (T[]) new Object[size];
+      
+      // copy the elements from the old array to the new array
+      for(int i = 0; i < size; i++){
+          newList[i] = array[i];
+      }
+      
+      // assign the array to point to the new array object
+      array = newList;
+  }
+  
+  public void ensureCapacity(int minCapacity) {
+      int oldSize = array.length;
+      
+      // create a new array with size plus minimum capacity that user set ;
+      T[] newList = (T[]) new Object[oldSize + minCapacity];
+      
+      // copy the elements from the old array to the new array
+      for(int i = 0; i < oldSize; i++){
+          newList[i] = array[i];
+      }
+      
+      // assign the array to point to the new array object
+      array = newList;
+  }
+  
   // private methods
   private boolean isArrayFull(){
       return numberOfEntries == array.length;
